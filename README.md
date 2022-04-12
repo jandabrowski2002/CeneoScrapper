@@ -16,3 +16,7 @@
 |Date of purchasing product|span.user-post__published > time:nth-child(2)\["datetime"\]|bought_on|
 |For how many users useful|button.vote-yes > span|useful_for|
 |For how many users useless|button.vote-no > span|useless_for|
+
+# Stages of project
+
+1) Extraction of elements for a single
