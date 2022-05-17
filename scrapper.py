@@ -1,10 +1,14 @@
+from pydoc import text
 from bs4 import BeautifulSoup
 import requests
 import json
-from translate import Translator
+from googletrans import Translator
 
 
-translator = Translator(from_lang="pl", to_lang="en")
+dest = "en"
+src = "pl"
+translator = Translator()
+
 
 def get_element(parent, selector, attribute = None, return_list = False):
     try:
@@ -15,6 +19,9 @@ def get_element(parent, selector, attribute = None, return_list = False):
         return parent.select_one(selector).text.strip()
     except (AttributeError, TypeError):
         return None
+
+def translate(text, src=src, dest=dest):
+    return translator.translate(text, src=src, dest=dest).text
 
 opinion_elements = {
     "author":["span.user-post__author-name"],
@@ -51,7 +58,9 @@ while (url):
         single_opinion["score"] = float(single_opinion["score"].split('/')[0].replace(',','.'))
         single_opinion["useful_for"] = int(single_opinion["useful_for"])
         single_opinion["useless_for"] = int(single_opinion["useless_for"])
-        single_opinion["content_en"] = translator.translate(single_opinion["content"])
+        single_opinion["content_en"] = translate(single_opinion["content"])
+        single_opinion["pros_en"] = [translate(pros) for pros in single_opinion["pros"]]
+        single_opinion["cons_en"] = [translate(cons) for cons in single_opinion["cons"]]
         all_opinions.append(single_opinion)
     try:
         url = "https://www.ceneo.pl"+get_element(page_dom,"a.pagination__next","href")
