@@ -3,7 +3,7 @@ from bs4 import BeautifulSoup
 import requests
 import json
 from googletrans import Translator
-
+import os
 
 dest = "en"
 src = "pl"
@@ -66,6 +66,13 @@ while (url):
         url = "https://www.ceneo.pl"+get_element(page_dom,"a.pagination__next","href")
     except TypeError: 
         url = None
+
+if not os.path.exists("opinions/"):
+    os.mkdir("opinions/")
+
+
+
+
 
 with open(f"opinions/{product_id}.json", "w", encoding="UTF-8") as jf:
     json.dump(all_opinions, jf, indent=4, ensure_ascii=False)
